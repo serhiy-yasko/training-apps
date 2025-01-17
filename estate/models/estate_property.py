@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class EstateProperty(models.Model):
@@ -36,6 +36,12 @@ class EstateProperty(models.Model):
     offer_ids = fields.One2many('estate.property.offer', 'property_id', string="Offers")
     total_area = fields.Integer('Total Area (sqm)', compute='_compute_total_area')
     best_price = fields.Float('Best Offer', compute='_compute_best_price')
+
+    @api.constrains('expected_price')
+    def _check_expected_price(self):
+        for record in self:
+            if record.expected_price < 1:
+                raise ValidationError("The expected price must be strictly positive")
 
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
