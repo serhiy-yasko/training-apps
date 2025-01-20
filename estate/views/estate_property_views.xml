@@ -74,10 +74,10 @@
                                 <field name="garden" />
                             </group>
                             <group>
-                                <field name="garden_area" />
+                                <field name="garden_area" invisible="not garden" />
                             </group>
                             <group>
-                                <field name="garden_orientation" />
+                                <field name="garden_orientation" invisible="not garden" />
                             </group>
                             <group>
                                 <field name="total_area" />
@@ -85,7 +85,7 @@
                         </page>
                         <page string="Offers">
                             <group>
-                                <field name="offer_ids" />
+                                <field name="offer_ids" readonly="state not in ['new', 'offer_received']" />
                             </group>
                         </page>
                         <page string="Other Info">
@@ -195,8 +195,8 @@
                 <field name="partner_id"/>
                 <field name="validity"/>
                 <field name="date_deadline"/>
-                <button name="action_accept" string="Accept" type="object" icon="fa-check"/>
-                <button name="action_refuse" string="Refuse" type="object" icon="fa-times"/>
+                <button name="action_accept" string="Accept" type="object" icon="fa-check" invisible="status"/>
+                <button name="action_refuse" string="Refuse" type="object" icon="fa-times" invisible="status"/>
                 <field name="status"/>
             </list>
         </field>
