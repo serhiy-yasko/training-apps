@@ -161,7 +161,8 @@
         <field name="name">estate.property.list.view</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <list string="Properties">
+            <list string="Properties" decoration-bf="state == 'offer_accepted'"
+                  decoration-success="state in ['offer_received', 'offer_accepted']" decoration-muted="state == 'sold'">
                 <field name="name"/>
                 <field name="property_type_id"/>
                 <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'colour'}"/>
@@ -200,14 +201,15 @@
         <field name="name">estate.property.offer.list.view</field>
         <field name="model">estate.property.offer</field>
         <field name="arch" type="xml">
-            <list string="Offers" editable="bottom">
+            <list string="Offers" editable="bottom" decoration-success="status == 'accepted'"
+                  decoration-danger="status == 'refused'">
                 <field name="price"/>
                 <field name="partner_id"/>
                 <field name="validity"/>
                 <field name="date_deadline"/>
                 <button name="action_accept" string="Accept" type="object" icon="fa-check" invisible="status"/>
                 <button name="action_refuse" string="Refuse" type="object" icon="fa-times" invisible="status"/>
-                <field name="status"/>
+                <field name="status" optional="hidden"/>
             </list>
         </field>
     </record>
