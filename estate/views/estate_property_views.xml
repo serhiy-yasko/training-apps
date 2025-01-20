@@ -28,6 +28,7 @@
                 <header>
                     <button name="action_mark_sold" string="Sold" type="object" class="oe_highlight"/>
                     <button name="action_mark_cancelled" string="Cancel" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold"/>
                 </header>
                 <sheet>
                     <group><h1><field name="name"/></h1></group>
