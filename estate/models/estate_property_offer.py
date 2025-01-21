@@ -18,8 +18,9 @@ class EstatePropertyOffer(models.Model):
 
     @api.model_create_multi
     def create(self, vals):
-        if vals[0]['price'] < self.env['estate.property'].browse(vals[0]['property_id']).best_price:
-            raise UserError("An offer with a higher price already exists")
+        best_price = self.env['estate.property'].browse(vals[0]['property_id']).best_price
+        if vals[0]['price'] < best_price:
+            raise UserError(f"The offer must be higher than {best_price}")
 
         self.env['estate.property'].browse(vals[0]['property_id']).state = 'offer_received'
         return super().create(vals)
