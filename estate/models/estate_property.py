@@ -39,6 +39,11 @@ class EstateProperty(models.Model):
     total_area = fields.Integer('Total Area (sqm)', compute='_compute_total_area')
     best_price = fields.Float('Best Offer', compute='_compute_best_price')
 
+    @api.ondelete(at_uninstall=False)
+    def _unlink_if_new_or_cancelled(self):
+        if any(record.state not in ['new', 'cancelled'] for record in self):
+            raise UserError("Only new and cancelled properties can be deleted")
+
     @api.constrains('expected_price')
     def _check_expected_price(self):
         for record in self:

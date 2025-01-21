@@ -1,6 +1,6 @@
 from datetime import timedelta
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class EstatePropertyOffer(models.Model):
@@ -15,6 +15,14 @@ class EstatePropertyOffer(models.Model):
     property_type_id = fields.Many2one(related='property_id.property_type_id', string="Property Type", store=True)
     validity = fields.Integer('Validity (days)', default=7)
     date_deadline = fields.Date('Deadline', compute='_compute_deadline', inverse="_inverse_deadline")
+
+    @api.model_create_multi
+    def create(self, vals):
+        if vals[0]['price'] < self.env['estate.property'].browse(vals[0]['property_id']).best_price:
+            raise UserError("An offer with a higher price already exists")
+
+        self.env['estate.property'].browse(vals[0]['property_id']).state = 'offer_received'
+        return super().create(vals)
 
     @api.constrains('price')
     def _check_price(self):
